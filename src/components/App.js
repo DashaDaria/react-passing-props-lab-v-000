@@ -2,9 +2,9 @@ import React from 'react';
 
 import FruitBasket from './FruitBasket';
 
-export default class App extends React.Component {
-  constructor(props){
-    super(props);
+ class App extends React.Component {
+  constructor(){
+    super();
 
     this.state = {
       fruit: [],
@@ -14,8 +14,18 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchFruit();
     this.fetchFilters();
+    this.fetchFruit();
+  }
+  handleChange = (event) => {
+    console.log('new filter: ', event.target.value);
+    this.setState({currentFilter: event.target.value})
+  }
+
+  fetchFilters = () => {
+    fetch('/api/fruit_types')
+      .then(response => response.json())
+      .then(filters => this.setState({ filters }));
   }
 
   fetchFruit() {
@@ -23,18 +33,6 @@ export default class App extends React.Component {
       .then(response => response.json())
       .then(fruit => this.setState({ fruit }));
   }
-
-  fetchFilters = () => {
-    fetch('/api/fruit_types')
-      .then(response => response.json())
-      .then(fruit => this.setState({ fruit }));
-  }
-
-  handleChange = (e) => {
-    console.log('new filter: ', e.target.value);
-    this.setState({currentFilter: e.target.value})
-  }
-
 
   render(){
     return (
@@ -47,3 +45,5 @@ export default class App extends React.Component {
     )
   }
 }
+
+export default App;
